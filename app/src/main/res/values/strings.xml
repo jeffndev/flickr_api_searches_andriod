@@ -2,4 +2,5 @@
     <string name="app_name">Flickr Searches</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world_msg">HOWDY, THERE!!</string>
+    <string name="flicker_api_key">1c4a20853c41e65187fe1ac23eb85538</string>
 </resources>
