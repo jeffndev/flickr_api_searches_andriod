@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 final String FORMAT_PARAM = "format";
                 final String NOJSON_CALLBACK_PARAM = "nojsoncallback";
                 final String SEARCH_TEXT_PARAM = "text";
+                final String EXTRAS_PARAM = "extras";
+                final String EXTRAS_IMAGE_URL_SETTING = "url_m";
                 //String restCallString = "https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=1c4a20853c41e65187fe1ac23eb85538&format=json&nojsoncallback=1";
                 Uri buildUri = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(METHOD_PARAM, "flickr.photos.search")
@@ -42,10 +45,12 @@ public class MainActivity extends AppCompatActivity {
                         .appendQueryParameter(FORMAT_PARAM,"json")
                         .appendQueryParameter(NOJSON_CALLBACK_PARAM,"1")
                         .appendQueryParameter(SEARCH_TEXT_PARAM,searchText)
+                        .appendQueryParameter(EXTRAS_PARAM,EXTRAS_IMAGE_URL_SETTING)
                         .build();
                 //String searchJsonStr = null;
                 TextView numPhotos = (TextView)findViewById(R.id.main_activity_num_photos);
-                FlickrRequestTask apiRequestTask = new FlickrRequestTask(numPhotos);
+                ImageView mainImage = (ImageView)findViewById(R.id.main_activity_selected_image_view);
+                FlickrRequestTask apiRequestTask = new FlickrRequestTask(numPhotos, mainImage);
                 apiRequestTask.execute(new Uri[]{buildUri});
             }
         });
