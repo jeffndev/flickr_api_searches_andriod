@@ -1,5 +1,7 @@
 package com.example.jnewel200.resume01;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,13 +16,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String IMAGE_BITMAP_SAVE_KEY = "MAIN_IMAGE_BITMAP";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        if(savedInstanceState != null){
+            ImageView im = (ImageView)findViewById(R.id.main_activity_selected_image_view);
+            Bitmap bmp = (Bitmap)savedInstanceState.getParcelable(IMAGE_BITMAP_SAVE_KEY);
+            im.setImageBitmap(bmp);
+        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
                 apiRequestTask.execute(new Uri[]{buildUri});
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        ImageView im = (ImageView)findViewById(R.id.main_activity_selected_image_view);
+        Bitmap bmp = ((BitmapDrawable)im.getDrawable()).getBitmap();
+        outState.putParcelable(IMAGE_BITMAP_SAVE_KEY, bmp);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
