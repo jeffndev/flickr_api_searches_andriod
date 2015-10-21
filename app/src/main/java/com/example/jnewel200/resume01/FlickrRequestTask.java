@@ -55,6 +55,11 @@ public class FlickrRequestTask extends AsyncTask<Uri, Void, Integer> {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+            final int statusCode = urlConnection.getResponseCode();
+            if( statusCode < 200 || statusCode > 299) {
+                Log.v(LOG_TAG,"http error status code " + statusCode + " returned from request.");
+                return totalPhotosFound;
+            }
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if(inputStream == null){
@@ -73,7 +78,7 @@ public class FlickrRequestTask extends AsyncTask<Uri, Void, Integer> {
             searchJsonStr = buffer.toString();
 
         }catch(IOException e){
-            Log.v("TAG_TODO", e.getLocalizedMessage());
+            Log.d("TAG_TODO", e.getLocalizedMessage());
         }
         try {
             JSONObject searchJson = new JSONObject(searchJsonStr);
@@ -89,10 +94,11 @@ public class FlickrRequestTask extends AsyncTask<Uri, Void, Integer> {
             }catch(IOException e){
                 Log.v(LOG_TAG, e.getLocalizedMessage());
             }
-
-
         }catch(JSONException e){
-            Log.v(LOG_TAG, e.getLocalizedMessage());
+            Log.d(LOG_TAG, e.getLocalizedMessage());
+            return totalPhotosFound;
+        }catch(Exception catchAll){
+            Log.d(LOG_TAG, catchAll.getLocalizedMessage());
             return totalPhotosFound;
         }
         Log.v(LOG_TAG, "Total photos: " + totalPhotosFound);
